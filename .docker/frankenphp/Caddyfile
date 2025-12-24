@@ -1,0 +1,14 @@
+:8080 {
+    root * /srv/app/public
+
+    php_server {
+                   root /srv/app/public
+                   worker index.php
+               }
+
+    file_server
+    log {
+            output stdout
+            level ERROR
+        }
+}

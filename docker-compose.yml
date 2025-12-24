@@ -1,0 +1,36 @@
+services:
+  app:
+    build:
+      dockerfile: .docker/frankenphp/Dockerfile
+      target: dev
+    ports:
+      - "80:8080"
+    volumes:
+      - .:/srv/app
+    extra_hosts:
+      host.docker.internal: host-gateway
+    networks:
+      - app-network
+    restart: unless-stopped
+
+  mysql:
+    image: mysql:8.4
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: db
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    networks:
+      - app-network
+    ports:
+      - "3306:3306"
+    restart: unless-stopped
+    volumes:
+      - app_data:/var/lib/mysql
+
+networks:
+  app-network:
+    external: true
+
+volumes:
+  app_data:
